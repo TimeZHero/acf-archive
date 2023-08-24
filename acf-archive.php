@@ -76,8 +76,8 @@ class ACF_Archive {
             if ( 'post' === $post_type ) {
                 $menu = 'edit.php';
             }
-
-            $this->add_menu( $post_type_object->label, $menu );
+            
+            $this->add_menu( $post_type_object, $menu );
         }
     }
 
@@ -111,7 +111,7 @@ class ACF_Archive {
      * @return string
      */
     private function get_admin_page_slug( $post_type ) {
-        return $post_type . '_page_archive-options';
+        return $post_type . '_page_' . $post_type .'-archive-options';
     }
 
     /**
@@ -136,18 +136,18 @@ class ACF_Archive {
     /**
      * Add ACF menu page for each custom post type
      *
-     * @param string $label
+     * @param WP_Post_Type $post_type
      * @param string $menu
      */
-    private function add_menu( $label, $menu ) {
-        $page_name = sprintf( __( '%s Archive', 'acf-archive' ), $label);
+    private function add_menu( $post_type, $menu ) {
+        $page_name = sprintf( __( '%s Archive', 'acf-archive' ), $post_type->label);
 
         $options = [
             'parent_slug' => $menu,
             'page_title'  => $page_name,
             'menu_title'  => $page_name,
             'capability'  => 'edit_posts',
-            'menu_slug'   => 'archive-options',
+            'menu_slug'   => "{$post_type->name}-archive-options",
         ];
 
         add_submenu_page(
@@ -246,11 +246,12 @@ class ACF_Archive {
         if ( ! isset( $_GET['post_type'] ) || ! isset( $_GET['page'] ) ) {
             return $match;
         }
-
-        return $_GET['post_type'] == $rule['value'] && $_GET['page'] == 'archive-options';
+        
+        return $_GET['post_type']   == $rule['value'] 
+            && $_GET['page']        == $_GET['post_type'] . '-archive-options';
     }
-
-    /**
+        
+        /**
      * Get all the custom post types with archive
      *
      * @return array
