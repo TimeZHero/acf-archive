@@ -1,9 +1,10 @@
 === Advanced Custom Fields: Archive Templates ===
+Fork of: https://wordpress.org/plugins/acf-archive/ by Stefano Fasoli due to inactivity
 Contributors: imarkimage,yehudah,idofri,rellect 
 Tags: advanced custom fields, acf, acf archive
 Requires at least: 4.1
 Tested up to: 5.4
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -63,6 +64,10 @@ Here is a code example you can add to to your theme functions.php
 1. ACF Archive menu page under each custom post type with archive enabled.
 
 == Changelog ==
+
+= 1.0.7 =
+Added rest endpoints for the archives under wp/v2/archives/{$post_type_slug}
+Fixed bug in the menu page visualization
 
 = 1.0.6 =
 Just update some info

@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * Plugin URI: https://www.imark.co.il/
  * Description: ACF Archives is a little plugin for helping you attach ACF fields to the archive template.
  * Text Domain: acf-archive
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Imark Image
  * Author URI: https://www.imark.co.il
  * License: GPL2
