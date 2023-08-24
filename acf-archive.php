@@ -45,6 +45,7 @@ class ACF_Archive {
         }
 
         add_action( 'admin_menu', [ $this, 'add_archive_option_page' ], 20 );
+        add_action( 'rest_api_init', [ $this, 'add_archive_endpoints' ], 20 );
         add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
         add_action( 'acf/input/admin_footer', [ $this, 'admin_footer' ], 10, 1 );
         add_filter( 'acf/location/rule_types', [ $this, 'location_rules_types' ] );
@@ -271,6 +272,28 @@ class ACF_Archive {
         $post_types = get_post_types( $args, 'objects' );
 
         return $post_types = apply_filters( 'acf_archive_post_types', $post_types );
+    }
+
+    /**
+     * Add rest routes to fetch data from each archive
+     * 
+     * @return void
+     */
+    public function add_archive_endpoints() {
+        $types = $this->get_custom_post_types();
+
+        foreach ($types as $type) {
+            register_rest_route('wp/v2', "/archives/{$type->name}", [
+                'methods' => 'GET',
+                'callback' => function (WP_REST_Request $request) use ($type) {
+                    $format = (bool) $request['acf_format'] ?? false;
+
+                    $fields = get_fields($type->name, $format) ?: (object) [];
+
+                    return new WP_REST_Response($fields, 200);
+                }
+            ]);
+        }
     }
 }
 
