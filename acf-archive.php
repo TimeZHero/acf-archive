@@ -285,12 +285,21 @@ class ACF_Archive {
         foreach ($types as $type) {
             register_rest_route('wp/v2', "/archives/{$type->name}", [
                 'methods' => 'GET',
-                'callback' => function (WP_REST_Request $request) use ($type) {
-                    $format = (bool) $request['acf_format'] ?? false;
+                'callback' => function (\WP_REST_Request $request) use ($type) {
+                    $base = defined('HEADLESS_MODE_CLIENT_URL')
+                        ? constant('HEADLESS_MODE_CLIENT_URL')
+                        : home_url();
 
-                    $fields = get_fields($type->name, $format) ?: (object) [];
+                    $slug = $type->has_archive === true
+                        ? $type->name
+                        : $type->has_archive;
 
-                    return new WP_REST_Response($fields, 200);
+                    $fields = [
+                        'permalink' => rtrim($base, '/') . "/{$slug}",
+                        ...get_fields($type->name, true) ?: [],
+                    ];
+
+                    return new \WP_REST_Response((object) $fields, 200);
                 }
             ]);
         }

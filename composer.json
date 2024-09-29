@@ -1,0 +1,6 @@
+{
+    "name": "timezhero/acf-archive",
+    "description": "Add archives option pages and relative rest API. Forked from https://wordpress.org/plugins/acf-archive/.",
+    "minimum-stability": "stable",
+    "type": "wordpress-plugin"
+}
